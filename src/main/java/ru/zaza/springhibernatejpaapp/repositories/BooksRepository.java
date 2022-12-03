@@ -11,5 +11,4 @@ import java.util.List;
 public interface BooksRepository extends JpaRepository<Book, Integer> {
     List<Book> findByOwner(Person owner);
 
-    // TODO: Remove owner from book
 }

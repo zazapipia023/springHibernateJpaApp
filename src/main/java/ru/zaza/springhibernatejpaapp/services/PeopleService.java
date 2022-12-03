@@ -45,4 +45,8 @@ public class PeopleService {
     public void delete(int id) {
         peopleRepository.deleteById(id);
     }
+
+    public Optional<Person> findByFullName(String fullName) {
+        return peopleRepository.findPersonByFullName(fullName);
+    }
 }

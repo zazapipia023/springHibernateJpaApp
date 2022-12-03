@@ -49,4 +49,20 @@ public class BookService {
     public List<Book> findByOwner(Person owner) {
         return booksRepository.findByOwner(owner);
     }
+
+    @Transactional
+    public void release(int id) {
+        Book book = booksRepository.findById(id).get();
+        book.setOwner(null);
+
+        booksRepository.save(book);
+    }
+
+    @Transactional
+    public void assign(int id, Person selectedPerson) {
+        Book book = booksRepository.findById(id).get();
+        book.setOwner(selectedPerson);
+
+        booksRepository.save(book);
+    }
 }
