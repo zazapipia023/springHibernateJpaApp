@@ -1,12 +1,11 @@
 package ru.zaza.springhibernatejpaapp.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.zaza.springhibernatejpaapp.dao.BookDAO;
-import ru.zaza.springhibernatejpaapp.dao.PersonDAO;
 import ru.zaza.springhibernatejpaapp.models.Book;
 import ru.zaza.springhibernatejpaapp.models.Person;
 import ru.zaza.springhibernatejpaapp.services.BookService;
@@ -28,8 +27,25 @@ public class BooksController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", bookService.findAll());
+    public String index(@RequestParam(name = "page", required = false) Integer page,
+                        @RequestParam(name = "books_per_page", required = false) Integer booksPerPage,
+                        @RequestParam(name = "sort_by_year", required = false, defaultValue = "false") Boolean isSorted,
+                        Model model) {
+
+        if (booksPerPage == null || page == null) {
+            if (isSorted) {
+                model.addAttribute("books", bookService.findAllSorted());
+            } else {
+                model.addAttribute("books", bookService.findAll());
+            }
+        } else {
+            if (isSorted) {
+                model.addAttribute("books", bookService.findAllSortedPaginated(page, booksPerPage));
+            } else {
+                model.addAttribute("books", bookService.findAllPaginated(page, booksPerPage));
+            }
+        }
+
         return "books/index";
     }
 
@@ -74,7 +90,7 @@ public class BooksController {
         if (bindingResult.hasErrors())
             return "books/edit";
 
-       bookService.update(id, book);
+        bookService.update(id, book);
         return "redirect:/books";
     }
 
@@ -94,5 +110,16 @@ public class BooksController {
     public String assign(@PathVariable("id") int id, @ModelAttribute("person") Person selectedPerson) {
         bookService.assign(id, selectedPerson);
         return "redirect:/books/" + id;
+    }
+
+    @GetMapping("/search")
+    public String searchPage() {
+        return "books/search";
+    }
+
+    @PostMapping("/search")
+    public String makeSearch(Model model, @RequestParam("query") String query) {
+        model.addAttribute("books", bookService.searchByTitle(query));
+        return "books/search";
     }
 }

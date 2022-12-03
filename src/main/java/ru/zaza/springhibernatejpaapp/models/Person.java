@@ -23,8 +23,11 @@ public class Person {
     @Column(name = "year_of_birth")
     private int yearOfBirth;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private List<Book> books;
+
+    @Transient
+    private boolean isOverdue;
 
     // Конструктор по умолчанию нужен для Spring
     public Person() {
