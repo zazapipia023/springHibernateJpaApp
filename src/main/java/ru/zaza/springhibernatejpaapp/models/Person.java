@@ -25,11 +25,6 @@ public class Person {
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private List<Book> books;
-
-    @Transient
-    private boolean isOverdue;
-
-    // Конструктор по умолчанию нужен для Spring
     public Person() {
 
     }

@@ -1,6 +1,8 @@
 package ru.zaza.springhibernatejpaapp.models;
 
 import org.hibernate.annotations.Fetch;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -39,6 +41,14 @@ public class Book {
 
     public Book() {
 
+    }
+
+    public Boolean isOverdue() {
+        if(Days.daysBetween(new DateTime(date), new DateTime(new Date())).getDays() > 10) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Book(String title, String author, int year) {

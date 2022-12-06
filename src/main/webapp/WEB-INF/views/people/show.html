@@ -17,9 +17,20 @@
   <hr/>
   <b>Книги:</b>
   <br/>
-  <table th:each="book : ${books}">
-    <tr th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</tr>
-  </table>
+  <ul th:each="book : ${books}">
+    <li th:style="${book.isOverdue() ? 'color:red' : _}"
+        th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</li>
+  </ul>
+
+<!--  <table th:each="book : ${books}">-->
+<!--      <tr th:if="${book.isOverdue()}"-->
+<!--          th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">-->
+<!--        <span style="color: red">book</span>-->
+<!--      </tr>-->
+
+<!--      <tr th:if="${!book.isOverdue()}"-->
+<!--          th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</tr>-->
+<!--  </table>-->
   <hr/>
 </div>
 
